@@ -10,6 +10,7 @@
     <version>1.0-RELEASE</version>
     <packaging>jar</packaging>
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!--dependency version-->
         <spring.version>3.2.16.RELEASE</spring.version>
         <junit.version>4.9</junit.version>
@@ -20,21 +21,27 @@
         <maven.source.plugin.version>2.1</maven.source.plugin.version>
         <maven.gpg.plugin.version>1.0</maven.gpg.plugin.version>
         <maven.javadoc.plugin.version>2.10.3</maven.javadoc.plugin.version>
+        <site.maven.plugin.version>0.11</site.maven.plugin.version>
         <!--==============================================================================发布配置信息START-->
-        <!--nexus私服-->
-        <sonatype.nexus.server.snapshots.addrres>http://localhost:8081/nexus/content/repositories/apache-snapshots</sonatype.nexus.server.snapshots.addrres>
-        <sonatype.nexus.server.central.address>http://localhost:8081/nexus/content/groups/public</sonatype.nexus.server.central.address>
-        <sonatype.nexus.server.bonaparte.dawn.release.address>http://localhost:8081/nexus/content/repositories/releases</sonatype.nexus.server.bonaparte.dawn.release.address>
-        <sonatype.nexus.server.bonaparte.dawn.snapshots.address>http://localhost:8081/nexus/content/repositories/snapshots</sonatype.nexus.server.bonaparte.dawn.snapshots.address>
-        <snapshot.repository.id>snapshots</snapshot.repository.id><!-- nexus server corresponds to entry in ~/.m2/settings.xml -->
-        <release.repository.id>releases</release.repository.id><!-- nexus server corresponds to entry in ~/.m2/settings.xml -->
-        <!--github私服-->
-        <github.global.server>github</github.global.server><!-- github server corresponds to entry in ~/.m2/settings.xml -->
+        <!--nexus私服(建议在MAVEN仓库的setting文件中配置)-->
+        <!--<sonatype.nexus.server.snapshots.profiles.id>nexus-snapshots</sonatype.nexus.server.snapshots.profiles.id>-->
+        <!--<sonatype.nexus.server.snapshots.addrres>http://localhost:8081/nexus/content/repositories/apache-snapshots</sonatype.nexus.server.snapshots.addrres>-->
+        <!--<sonatype.nexus.server.central.profiles.id>nexus</sonatype.nexus.server.central.profiles.id>-->
+        <!--<sonatype.nexus.server.central.address>http://localhost:8081/nexus/content/groups/public</sonatype.nexus.server.central.address>-->
+        <!--nexus私服发布配置-->
+        <sonatype.nexus.server.bonaparte.dawn.server.release.repository.id>releases</sonatype.nexus.server.bonaparte.dawn.server.release.repository.id><!-- nexus server corresponds to entry in ~/.m2/settings.xml -->
+        <sonatype.nexus.server.bonaparte.dawn.server.release.address>http://localhost:8081/nexus/content/repositories/releases</sonatype.nexus.server.bonaparte.dawn.server.release.address>
+        <sonatype.nexus.server.bonaparte.dawn.server.snapshot.repository.id>snapshots</sonatype.nexus.server.bonaparte.dawn.server.snapshot.repository.id><!-- nexus server corresponds to entry in ~/.m2/settings.xml -->
+        <sonatype.nexus.server.bonaparte.dawn.server.snapshots.address>http://localhost:8081/nexus/content/repositories/snapshots</sonatype.nexus.server.bonaparte.dawn.server.snapshots.address>
+        <!--github私服发布配置-->
+        <github.global.server.repository.id>github</github.global.server.repository.id><!-- github server corresponds to entry in ~/.m2/settings.xml -->
         <github.owner.name>BonaparteDawn</github.owner.name>
         <github.repository.name>maven-repo</github.repository.name>
         <github.branch>master</github.branch>
         <!--==============================================================================发布配置信息END-->
     </properties>
+
+    <!--=============开发者信息START-->
     <developers>
         <developer>
             <name>Bonaparte.Dawn</name>
@@ -45,9 +52,11 @@
             <timezone>+8</timezone>
         </developer>
     </developers>
+    <!--=============开发者信息END-->
 
     <dependencies>
         <!--本系统开发的模块-END==========================================================-->
+        <!--=========不变部分START-->
         <!--SPRING核心套件-开始-->
         <dependency>
             <groupId>org.springframework</groupId>
@@ -93,89 +102,93 @@
             <version>${spring.version}</version>
             <scope>test</scope>
         </dependency>
+        <!--=========不变部分END-->
+        <!--=========自定义部分START-->
+        <!--=========自定义部分END-->
         <!--外部库模块-END===============================================================-->
     </dependencies>
-    <repositories>
-        <!--==================================================================Nexus私服START-->
-        <repository>
-            <id>nexus</id>
-            <name>local private nexus</name>
-            <url>${sonatype.nexus.server.central.address}</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>nexus-snapshots</id>
-            <name>local private nexus</name>
-            <url>${sonatype.nexus.server.snapshots.addrres}</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>nexus</id>
-            <name>local private nexus</name>
-            <url>${sonatype.nexus.server.central.address}</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </pluginRepository>
-        <pluginRepository>
-            <id>nexus-snapshots</id>
-            <name>local private nexus</name>
-            <url>${sonatype.nexus.server.snapshots.addrres}</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
+
+    <!--<repositories>-->
+        <!--&lt;!&ndash;==================================================================Nexus私服START&ndash;&gt;-->
+        <!--<repository>-->
+            <!--<id>${sonatype.nexus.server.central.profiles.id}</id>-->
+            <!--<name>local private nexus</name>-->
+            <!--<url>${sonatype.nexus.server.central.address}</url>-->
+            <!--<releases>-->
+                <!--<enabled>true</enabled>-->
+            <!--</releases>-->
+            <!--<snapshots>-->
+                <!--<enabled>false</enabled>-->
+            <!--</snapshots>-->
+        <!--</repository>-->
+        <!--<repository>-->
+            <!--<id>${sonatype.nexus.server.snapshots.profiles.id}</id>-->
+            <!--<name>local private nexus</name>-->
+            <!--<url>${sonatype.nexus.server.snapshots.addrres}</url>-->
+            <!--<releases>-->
+                <!--<enabled>false</enabled>-->
+            <!--</releases>-->
+            <!--<snapshots>-->
+                <!--<enabled>true</enabled>-->
+            <!--</snapshots>-->
+        <!--</repository>-->
+    <!--</repositories>-->
+    <!--<pluginRepositories>-->
+        <!--<pluginRepository>-->
+            <!--<id>${sonatype.nexus.server.central.profiles.id}</id>-->
+            <!--<name>local private nexus</name>-->
+            <!--<url>${sonatype.nexus.server.central.address}</url>-->
+            <!--<releases>-->
+                <!--<enabled>true</enabled>-->
+            <!--</releases>-->
+            <!--<snapshots>-->
+                <!--<enabled>false</enabled>-->
+            <!--</snapshots>-->
+        <!--</pluginRepository>-->
+        <!--<pluginRepository>-->
+            <!--<id>${sonatype.nexus.server.snapshots.profiles.id}</id>-->
+            <!--<name>local private nexus</name>-->
+            <!--<url>${sonatype.nexus.server.snapshots.addrres}</url>-->
+            <!--<releases>-->
+                <!--<enabled>false</enabled>-->
+            <!--</releases>-->
+            <!--<snapshots>-->
+                <!--<enabled>true</enabled>-->
+            <!--</snapshots>-->
+        <!--</pluginRepository>-->
+    <!--</pluginRepositories>-->
     <!--==================================================================Nexus私服END-->
 
     <!--==================================================================Nexus私服发布分布式管理START-->
     <!--<distributionManagement>-->
         <!--<snapshotRepository>-->
-            <!--<id>${snapshot.repository.id}</id>-->
+            <!--<id>${sonatype.nexus.server.bonaparte.dawn.server.snapshot.repository.id}</id>-->
             <!--<name>Nexus Snapshot Repository</name>-->
-            <!--<url>${sonatype.nexus.server.bonaparte.dawn.snapshots.address}</url>-->
+            <!--<url>${sonatype.nexus.server.bonaparte.dawn.server.snapshots.address}</url>-->
             <!--<uniqueVersion>true</uniqueVersion>-->
         <!--</snapshotRepository>-->
         <!--<repository>-->
-            <!--<id>${release.repository.id}</id>-->
+            <!--<id>${<sonatype.nexus.server.bonaparte.dawn.server.release.repository.id}</id>-->
             <!--<name>Nexus Release Repository</name>-->
-            <!--<url>${sonatype.nexus.server.bonaparte.dawn.release.address}</url>-->
+            <!--<url>${sonatype.nexus.server.bonaparte.dawn.server.release.address}</url>-->
         <!--</repository>-->
     <!--</distributionManagement>-->
     <!--==================================================================Nexus私服发布分布式管理END-->
 
     <!--==================================================================GITHUB私服发布分布式管理START-->
-    <distributionManagement>
-        <snapshotRepository>
-            <id>snapshots</id>
-            <name>Snapshot Repository</name>
-            <url>file://${project.build.directory}/mvn-repo/snapshots</url>
-            <uniqueVersion>true</uniqueVersion>
-        </snapshotRepository>
-        <repository>
-            <id>releases</id>
-            <name>Release Repository</name>
-            <url>file://${project.build.directory}/mvn-repo/releases</url>
-        </repository>
-    </distributionManagement>
+    <!--<distributionManagement>-->
+        <!--<snapshotRepository>-->
+            <!--<id>snapshots</id>-->
+            <!--<name>Snapshot Repository</name>-->
+            <!--<url>file://${project.build.directory}/mvn-repo/snapshots</url>-->
+            <!--<uniqueVersion>true</uniqueVersion>-->
+        <!--</snapshotRepository>-->
+        <!--<repository>-->
+            <!--<id>releases</id>-->
+            <!--<name>Release Repository</name>-->
+            <!--<url>file://${project.build.directory}/mvn-repo/releases</url>-->
+        <!--</repository>-->
+    <!--</distributionManagement>-->
     <!--==================================================================GITHUB私服发布分布式管理END-->
 
     <build>
@@ -232,7 +245,7 @@
                                 <goal>copy-resources</goal>
                             </goals>
                             <configuration>
-                                <encoding>UTF-8</encoding>
+                                <encoding>${project.build.sourceEncoding}</encoding>
                                 <outputDirectory>${project.build.directory}/META-INF</outputDirectory>
                                 <resources>
                                     <resource>
@@ -293,7 +306,7 @@
                 <plugin>
                     <groupId>com.github.github</groupId>
                     <artifactId>site-maven-plugin</artifactId>
-                    <version>0.11</version>
+                    <version>${site.maven.plugin.version}</version>
                     <configuration>
                         <!-- git commit message -->
                         <message>Maven artifacts for ${project.version}</message>
@@ -323,7 +336,9 @@
                 </plugin>
             </plugins>
         </pluginManagement>
+        <!--===================================使用指定插件START-->
         <plugins>
+            <!--===========================不变部分START-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -344,10 +359,15 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
             </plugin>
-            <plugin>
-                <groupId>com.github.github</groupId>
-                <artifactId>site-maven-plugin</artifactId>
-            </plugin>
+            <!--===========================不变部分END-->
+            <!--===========================根据具体情况使用插件部分START-->
+            <!--1、发布到maven私服的插件-->
+            <!--<plugin>-->
+                <!--<groupId>com.github.github</groupId>-->
+                <!--<artifactId>site-maven-plugin</artifactId>-->
+            <!--</plugin>-->
+            <!--===========================根据具体情况使用插件部分END-->
         </plugins>
+        <!--===================================使用指定插件END-->
     </build>
 </project>
