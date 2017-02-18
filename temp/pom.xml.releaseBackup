@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>temp</groupId>
+    <artifactId>temp</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <properties>
+        <git.name>maven-repo</git.name>
+    </properties>
+    <scm>
+        <connection>scm:git:https://github.com/BonaparteDawn/maven-repo.git</connection>
+    </scm>
+    
+    <profiles>
+        <profile>
+            <id>gitrelease</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.github.github</groupId>
+                        <artifactId>site-maven-plugin</artifactId>
+                        <version>0.7</version>
+                        <configuration>
+                            <description>Official ${project.name} build of the
+                                ${project.version} release</description>
+                            <message>Official ${project.name} build</message>
+                            <server>github.com</server>
+                            <repositoryName>${git.name}</repositoryName>
+                            <repositoryOwner>BonaparteDawn</repositoryOwner>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>site</goal>
+                                </goals>
+                                <phase>site</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>com.github.github</groupId>
+                        <artifactId>downloads-maven-plugin</artifactId>
+                        <version>0.6</version>
+                        <configuration>
+                            <description>${project.version} release of ${project.name}</description>
+                            <override>true</override>
+                            <includeAttached>true</includeAttached>
+                            <server>github.com</server>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>upload</goal>
+                                </goals>
+                                <phase>deploy</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-site-plugin</artifactId>
+                        <version>3.0</version>
+                        <configuration>
+                            <reportPlugins>
+                                <plugin>
+                                    <groupId>org.apache.maven.plugins</groupId>
+                                    <artifactId>maven-project-info-reports-plugin</artifactId>
+                                    <version>2.5</version>
+                                    <reportSets>
+                                        <reportSet>
+                                            <reports>
+                                                <report>dependencies</report>
+                                                <report>project-team</report>
+                                                <report>mailing-list</report>
+                                                <report>cim</report>
+                                                <report>issue-tracking</report>
+                                                <report>license</report>
+                                                <report>scm</report>
+                                            </reports>
+                                        </reportSet>
+                                    </reportSets>
+                                </plugin>
+                                <plugin>
+                                    <groupId>org.apache.maven.plugins</groupId>
+                                    <artifactId>maven-javadoc-plugin</artifactId>
+                                    <version>2.7</version>
+                                </plugin>
+                                <plugin>
+                                    <groupId>org.apache.maven.plugins</groupId>
+                                    <artifactId>maven-surefire-report-plugin</artifactId>
+                                    <version>2.6</version>
+                                </plugin>
+                            </reportPlugins>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>
