@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+	<properties resource="META-INF/db/mysql.properties"></properties>
+
+	<context id="member" targetRuntime="MyBatis3">
+		<!-- 配置内置的或者自定义的Plugin -->
+		<plugin type="github.bonapartedawn.mybatis.BaseMapperGeneratorPlugin" />
+		<!--自定义bean注释  -->
+		<commentGenerator type="github.bonapartedawn.mybatis.MyCommentGenerator">
+			<property name="javaFileEncoding" value="UTF-8" />
+			<property name="suppressAllComments" value="false"/><!-- 是否取消注释 -->
+			<property name="suppressDate" value="false" /> <!-- 是否生成注释代时间戳-->
+		</commentGenerator>
+
+		<!--数据库连接 -->
+		<jdbcConnection driverClass="${db.driverClass}"
+						connectionURL="${db.jdbcUrl}"
+						userId="${db.user}"
+						password="${db.password}">
+		</jdbcConnection>
+		<!--默认false Java type resolver will always use java.math.BigDecimal if 
+			the database column is of type DECIMAL or NUMERIC. -->
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+		<!--生成实体类 指定包名 以及生成的地址 （可以自定义地址，但是路径不存在不会自动创建 使用Maven生成在target目录下，会自动创建） -->
+		<javaModelGenerator targetPackage="github.bonapartedawn.entity" targetProject="../domain/src/main/java">
+			<property name="enableSubPackages" value="true" />
+			<property name="trimStrings" value="true" />
+			<!-- 是否对model添加 构造函数 -->
+			<property name="constructorBased" value="false" />
+		</javaModelGenerator>
+		<!--生成SQLMAP文件 -->
+		<sqlMapGenerator targetPackage="META-INF.db.mapper" targetProject="src/main/resources">
+			<property name="enableSubPackages" value="true" />
+		</sqlMapGenerator>
+		<!--生成Dao文件 可以配置 type="XMLMAPPER"生成xml的dao实现 context id="DB2Tables" 修改targetRuntime="MyBatis3" -->
+		<javaClientGenerator type="XMLMAPPER" targetPackage="github.bonapartedawn.mapper" targetProject="src/main/java">
+			<property name="enableSubPackages" value="true" />
+			<!-- 可以为所有生成的接口添加一个父接口，但是MBG只负责生成，不负责检查 -->
+		</javaClientGenerator>
+		<table tableName="keyStore" domainObjectName="KeyStore">
+			<property name="useActualColumnNames" value="true" />
+			<generatedKey column="id" sqlStatement="MySql" identity="true" />
+		</table>
+
+	</context>
+</generatorConfiguration>

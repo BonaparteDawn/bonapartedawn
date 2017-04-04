@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+    <!-- 指定spring注解注入层 -->
+    <context:component-scan base-package="github.bonapartedawn.service,github.bonapartedawn.timer" />
+    <context:property-placeholder location="file:config/keyStore.properties,file:config/mysql.properties"/>
+    <!-- 加载配置文件 -->
+    <import resource="classpath*:META-INF/spring/springDao.xml"/>
+    <import resource="classpath*:META-INF/dubbo/dubbo-provider.xml"/>
+    <bean id="SpringQtzJobMethod" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="keyStoreTimer"/>
+        </property>
+        <property name="targetMethod"><!-- 要执行的方法名称 -->
+            <value>run</value>
+        </property>
+    </bean>
+    <!-- ======================== 调度触发器 ======================== -->
+    <bean id="triggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="SpringQtzJobMethod"/>
+        <property name="cronExpression" value="${triggerBean.cronExpression}" />
+    </bean>
+    <!-- ======================== 调度工厂 ======================== -->
+    <bean id="schedulerBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" lazy-init="false">
+        <property name="triggers">
+            <list>
+                <ref bean="triggerBean"/>
+            </list>
+        </property>
+    </bean>
+</beans>
